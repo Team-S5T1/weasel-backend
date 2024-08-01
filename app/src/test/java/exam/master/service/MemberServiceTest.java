@@ -40,7 +40,7 @@ public class MemberServiceTest {
     //When
     UUID saveId = memberService.join(member);
     //Then
-    assertEquals(member, memberRepository.findOne(saveId));
+    assertEquals(member, memberRepository.findById(saveId));
   }
   //  @Test(expected = IllegalStateException.class)
   @Test
@@ -71,7 +71,7 @@ public class MemberServiceTest {
     member.setEmail("kim@222");
     UUID updateId = memberService.update(member);
     //Then
-    assertEquals(member, memberRepository.findOne(updateId));
+    assertEquals(member, memberRepository.findById(updateId));
   }
 
   @Test
@@ -85,7 +85,7 @@ public class MemberServiceTest {
     //When
     UUID updateId = memberService.delete(member);
     //Then
-    assertEquals(member, memberRepository.findOne(updateId));
+    assertEquals(member, memberRepository.findById(updateId));
   }
 
   @Test

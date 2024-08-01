@@ -36,6 +36,9 @@ dependencies {
     // template(thymeleaf)
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+    // 데이터 유효성 검사
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
     // springboot
     implementation 'org.springframework.boot:spring-boot-starter-web'
 

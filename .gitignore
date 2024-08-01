@@ -1,3 +1,4 @@
+*.yaml
 *.yml
 
 # Ignore Gradle project-specific cache directory
