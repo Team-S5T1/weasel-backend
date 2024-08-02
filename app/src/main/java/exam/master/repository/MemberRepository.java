@@ -41,7 +41,6 @@ public class MemberRepository {
     return Optional.ofNullable(member);
   }
 
-
   public void deleteById(UUID memberId) {
     Member member = em.find(Member.class, memberId);
     if (member != null) {
@@ -61,8 +60,13 @@ public class MemberRepository {
   // SQL 쿼리문에 파라미터를 설정하는 예제
   // SQL 쿼리 = JPQL
   // 엔티티 객체를 쿼리 한다고 보면 편하다.
-  public List<Member> findByEmail(String email){
-    return em.createQuery("select m from Member m where m.email = :email", Member.class).setParameter("email", email).getResultList();
+  public Member findByEmail(String email){
+    try{
+      return em.createQuery("select m from Member m where m.email = :email", Member.class).setParameter("email", email).getSingleResult();
+    } catch (NoResultException e){
+      return null;
+    }
+
   }
 
   public Member findByEmailAndPassword(String email, String password){

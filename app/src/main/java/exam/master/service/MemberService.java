@@ -1,6 +1,7 @@
 package exam.master.service;
 
 import exam.master.domain.Member;
+import exam.master.dto.LogInRequest;
 import exam.master.dto.MemberDTO;
 import exam.master.repository.HistoryRepository;
 import exam.master.repository.MemberRepository;
@@ -52,12 +53,16 @@ public class MemberService {
     }
     Member existingMember = optionalMember.get();
 
-    existingMember.setEmail(updatedMemberDTO.getEmail());
-    existingMember.setStatus(updatedMemberDTO.getStatus());
-    existingMember.setProfilePhoto(updatedMemberDTO.getProfilePhoto());
-
+    if (updatedMemberDTO.getEmail() != null) {
+      existingMember.setEmail(updatedMemberDTO.getEmail());
+    }
+    if (updatedMemberDTO.getProfilePhoto() != null) {
+      existingMember.setProfilePhoto(updatedMemberDTO.getProfilePhoto());
+    }
     // 비밀번호 업데이트 시 추가 검증 로직이 필요할 수 있음
-    existingMember.setPassword(updatedMemberDTO.getPassword());
+    if (updatedMemberDTO.getPassword() != null) {
+      existingMember.setPassword(updatedMemberDTO.getPassword());
+    }
 
     // 변경된 내용을 저장
     Member updatedMember = memberRepository.save(existingMember);
@@ -79,6 +84,7 @@ public class MemberService {
   public List<Member> findMember(){
     return memberRepository.findAll();
   }
+
   public MemberDTO getMemberById(UUID memberId) {
     Optional<Member> optionalMember = memberRepository.findById(memberId);
     if (!optionalMember.isPresent()) {
@@ -89,7 +95,30 @@ public class MemberService {
   }
 
 
-  // 로그인
+  /**
+   * 로그인 기능
+   *  return member - 로그인 성공
+   *  return null - 로그인 실패
+  */
+  public Member login(LogInRequest req){
+
+    // 해당 이메일로 회원인지 확인
+    Member checkMember = memberRepository.findByEmail(req.getEmail());
+
+    // Email과 일치하는 Member가 없으면 null return
+    if(checkMember.getEmail().isEmpty()){
+      return null;
+    }
+
+    Member existMember = memberRepository.findByEmailAndPassword(req.getEmail(), req.getPassword());
+
+    // 찾아온 Member의 password와 입력된 password가 다르면 null return
+    if (existMember == null || !existMember.getPassword().equals(req.getPassword())) {
+      return null;
+    }
+
+    return existMember;
+  }
 
   public Member findByEmailAndPassword (String email, String password){
     Member loginUser = memberRepository.findByEmailAndPassword(email, password);
@@ -98,6 +127,16 @@ public class MemberService {
     loginUser.setHistories(historyRepository.findAll(loginUser.getMemberId()));
     return loginUser;
   }
+
+  private LogInRequest convertToLoginRequest(Member member) {
+    LogInRequest logInRequest = new LogInRequest();
+
+    logInRequest.setEmail(member.getEmail());
+    logInRequest.setPassword(member.getPassword());
+
+    return logInRequest;
+  }
+
 
   // Member api Response에 사용될 DTO로 변환
   private MemberDTO convertToDTO(Member member){
@@ -138,9 +177,10 @@ public class MemberService {
   }
   // 검증
   public void validateDuplicateMember(Member member){
-    List<Member> findMembers = memberRepository.findByEmail(member.getEmail());
-    if(!findMembers.isEmpty()){
+    Member findMember = memberRepository.findByEmail(member.getEmail());
+    if(!findMember.getEmail().isEmpty()){
       throw new IllegalStateException("이미 존재하는 회원입니다.");
     }
   }
+
 }
