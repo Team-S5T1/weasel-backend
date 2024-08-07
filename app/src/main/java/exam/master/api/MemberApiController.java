@@ -21,7 +21,9 @@ import java.util.Hashtable;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/v1/")
 @RequiredArgsConstructor
+
 public class MemberApiController {
 
     private final MemberService memberService;

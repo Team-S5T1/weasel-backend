@@ -31,10 +31,13 @@ public class MemberService {
 
     Member member = new Member();
     member.setEmail(memberDTO.getEmail());
-    //중복된 이메일로 가입되있는지 확인
-    validateDuplicateMember(member);
 
-    member.setPassword(memberDTO.getPassword());
+    System.out.println("============");
+    System.out.println(" memberDTO.getEmail() : "+ memberDTO.getEmail());
+    //중복된 이메일로 가입되있는지 확인
+    validateDuplicateMember(memberDTO.getEmail());
+
+    member.setPassword(memberDTO.getEmail());
     member.setStatus(memberDTO.getStatus());
     member.setProfilePhoto(memberDTO.getProfilePhoto());
 
@@ -152,14 +155,14 @@ public class MemberService {
 
   /* 아래는 테스트로 썻던 오브젝트 */
   // 등록
-  @Transactional
+/*  @Transactional
   public UUID join(Member member){
 
     // 중복 회원 검증
     validateDuplicateMember(member);
     memberRepository.save(member);
     return member.getMemberId();
-  }
+  }*/
 
   // 수정
   @Transactional
@@ -176,9 +179,9 @@ public class MemberService {
     return member.getMemberId();
   }
   // 검증
-  public void validateDuplicateMember(Member member){
-    Member findMember = memberRepository.findByEmail(member.getEmail());
-    if(!findMember.getEmail().isEmpty()){
+  public void validateDuplicateMember(String email){
+    Member findMember = memberRepository.findByEmail(email);
+    if(findMember.getEmail()!=null||!findMember.getEmail().isEmpty()){
       throw new IllegalStateException("이미 존재하는 회원입니다.");
     }
   }
