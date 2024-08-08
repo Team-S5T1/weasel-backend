@@ -181,7 +181,7 @@ public class MemberService {
   // 검증
   public void validateDuplicateMember(String email){
     Member findMember = memberRepository.findByEmail(email);
-    if(findMember.getEmail()!=null||!findMember.getEmail().isEmpty()){
+    if (findMember != null) {
       throw new IllegalStateException("이미 존재하는 회원입니다.");
     }
   }
