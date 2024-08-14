@@ -16,7 +16,10 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
 }
+
 
 dependencies {
     // Use JUnit Jupiter for testing.
@@ -36,9 +39,6 @@ dependencies {
     // template(thymeleaf)
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-    // 데이터 유효성 검사
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-
     // springboot
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
@@ -54,6 +54,23 @@ dependencies {
 
     // myslq jdbc 라이브러리
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // AWS Secret Manager 라이브러리
+    implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4'
+
+    //aws s3 연동
+    implementation 'io.awspring.cloud:spring-cloud-aws-s3:3.0.2'
+
+    // json 관련 라이브러리
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.1' // 적절한 Jackson 버전
+    implementation 'org.json:json:20231013'
+
+    // AWS sdk for java bedrock
+    implementation(platform("software.amazon.awssdk:bom:2.21.1"))
+    implementation group: 'software.amazon.awssdk', name: 'bedrockruntime', version: '2.27.0'
+    implementation("software.amazon.awssdk:sts")
+    implementation("software.amazon.awssdk:bedrock")
 
     // 그 외 라이브러리
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
