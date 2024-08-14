@@ -64,10 +64,11 @@ pipeline {
             }
         }
 
-        stage('Building image') {
-            steps {
+                stage('Building image') {
+            steps{
                 script {
-                        sh "docker build -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} ."
+                        // sh "docker build -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} ."
+                        sh "docker build -t ${REPOSITORY_URL}:${IMAGE_TAG} ."
                 }
             }
         }
@@ -75,16 +76,18 @@ pipeline {
         stage('Pushing to ECR') {
             steps {
                 script {
-                    sh """docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URL}:${IMAGE_TAG}"""
-                    sh """docker push ${REPOSITORY_URL}:${IMAGE_TAG}"""
+                    // sh """docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:${IMAGE_TAG}"""
+                    // sh """docker push ${REPOSITORY_URI}:${IMAGE_TAG}"""
+                    sh "docker push ${REPOSITORY_URL}:${IMAGE_TAG}"
                 }
             }
         }
-
+        
         stage('Delete Docker images') {
             steps {
                 script {
-                    sh """docker rmi ${IMAGE_REPO_NAME}:${IMAGE_TAG}"""
+                    // sh """docker rmi ${IMAGE_REPO_NAME}:${IMAGE_TAG}"""
+                    sh "docker rmi ${REPOSITORY_URL}:${IMAGE_TAG}"
                 }
             }
         }

@@ -14,8 +14,9 @@ public class PromptRepository {
 
   private final EntityManager em;
 
-  public void save(Prompt prompt){
+  public Prompt save(Prompt prompt){
     em.persist(prompt);
+    return prompt;
   }
 
   public List<Prompt> findByHistoryId(UUID historyId) {
@@ -24,5 +25,9 @@ public class PromptRepository {
         .getResultList();
   }
 
-
+  public int deletePromptsByHistoryId(UUID historyId){
+    return em.createQuery("DELETE FROM Prompt p WHERE p.history.id = :historyId")
+        .setParameter("historyId", historyId)
+        .executeUpdate(); // 데이터베이스에 변경 사항을 적용, 삭제된 행의 수를 반환
+  }
 }

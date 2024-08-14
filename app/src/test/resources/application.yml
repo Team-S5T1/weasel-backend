@@ -1,0 +1,56 @@
+spring:
+  config:
+    # 시크릿 매니저 설정
+    #    로컬과 서버에서 application.yml 파일에 코드를 수정하지 않고 동작시키기 위해서 optional 옵션 사용
+    import: 'optional:aws-secretsmanager:/secret/prod/weasel'
+  #    import: 'aws-secretsmanager:/secret/prod/weasel'
+  #    import: 'aws-secretsmanager:arn:aws:secretsmanager:us-east-1:393035689023:secret:/secret/prod/weasel-I4AhIF'
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+  datasource:
+    # mysql 데이터베이스 이용할 때
+    url: jdbc:mysql://${HOST}:${PORT}/${DATABASE}
+    #    키 이름을 USERNAME을 사용하니까 실제 환경변수에서 값을 읽음
+    #    그래서 MYSQL_USERNAME으로 변경
+    #    username: ${USERNAME}
+    username: ${MYSQL_USERNAME}
+    password: ${PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    url: ${local-url}
+  #    username: ${local-name}
+  #    password: ${local-pw}
+  #    driver-class-name: org.h2.Driver
+
+  jpa:
+    # mysql 데이터베이스 이용할 때
+    #    hibernate가 자바에서 사용된 일관된 sql문(jpql)을 각 데이터베이스에 맞게 번역을 시키기 위해서 설정해야 한다.
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    #    dialect: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+#    io.awspring.cloud.secretsmanager: DEBUG
+#    com.amazonaws: DEBUG
+
+cloud:
+  aws:
+    s3:
+      bucket: weasel-images # 버킷 이름
+    region:
+      static: us-east-1
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${accessKey}
+      secretKey: ${secretKey}
