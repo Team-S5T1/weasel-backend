@@ -1,6 +1,5 @@
 package exam.master.service;
 
-import exam.master.config.InvokeModel;
 import exam.master.domain.History;
 import exam.master.domain.Member;
 import exam.master.domain.Prompt;
@@ -10,15 +9,16 @@ import exam.master.dto.PromptDTO;
 import exam.master.repository.HistoryRepository;
 import exam.master.repository.MemberRepository;
 import exam.master.repository.PromptRepository;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -73,8 +73,8 @@ public class PromptService {
 
       // 베드락에서 응답 받아오기
       // 이미지 파일 프롬포트에서 무조건 받을지, 아니면 없어도 텍스트만 프롬포트로 오면 보낼지 확인 필요
-      String answer = InvokeModel.invokeModel(fileBytes, promptDTO.getPrompt());
-      prompt.setAnswer(answer);
+//      String answer = InvokeModel.invokeModel(fileBytes, promptDTO.getPrompt());
+//      prompt.setAnswer(answer);
 
     }else{
       prompt.setPhoto("photo is null!");
